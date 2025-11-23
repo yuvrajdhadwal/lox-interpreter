@@ -58,9 +58,9 @@ std::string read_file_contents(const std::string& filename) {
 int parse_characters(std::string_view file_contents)
 {
     int exit_code {0};
-    for (char c : file_contents)
+    for (int i {0}; i < file_contents.length(); ++i)
     {
-        switch (c)
+        switch (file_contents[i])
         {
         case '(':
             std::cout << "LEFT_PAREN ( null\n";
@@ -95,8 +95,17 @@ int parse_characters(std::string_view file_contents)
         case '*':
             std::cout << "STAR * null\n";
             break;
+        case '=':
+            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
+            {
+                std::cout << "EQUAL_EQUAL == null\n";
+                i += 1;
+            } else {
+                std::cout << "EQUAL = null\n";
+            }
+            break;
         default:
-            std::cerr << "[line 1] Error: Unexpected character: " << c << '\n';
+            std::cerr << "[line 1] Error: Unexpected character: " << file_contents[i] << '\n';
             exit_code = 65;
         }   
     }
