@@ -60,6 +60,7 @@ int parse_characters(std::string_view file_contents)
     int exit_code {0};
     for (int i {0}; i < file_contents.length(); ++i)
     {
+        std::string rel_op_parse{};
         switch (file_contents[i])
         {
         case '(':
@@ -90,45 +91,40 @@ int parse_characters(std::string_view file_contents)
             std::cout << "SEMICOLON ; null\n";
             break;
         case '/':
+            if (i + 1 < file_contents.length() && file_contents[i + 1] == '/')
+            {
+                return exit_code;
+            }
+            
             std::cout << "SLASH / null\n";
             break;
         case '*':
             std::cout << "STAR * null\n";
             break;
         case '=':
-            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
-            {
-                std::cout << "EQUAL_EQUAL == null\n";
-                i += 1;
-            } else {
-                std::cout << "EQUAL = null\n";
-            }
-            break;
         case '!':
-            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
-            {
-                std::cout << "BANG_EQUAL != null\n";
-                i += 1;
-            } else {
-                std::cout << "BANG ! null\n";
-            }
-            break;
         case '<':
-            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
-            {
-                std::cout << "LESS_EQUAL <= null\n";
-                i += 1;
-            } else {
-                std::cout << "LESS < null\n";
-            }
-            break;
         case '>':
+            if (file_contents[i] == '=')
+            {
+                rel_op_parse = "EQUAL";
+            } else if (file_contents[i] == '!')
+            {
+                rel_op_parse = "BANG";
+            } else if (file_contents[i] == '<')
+            {
+                rel_op_parse = "LESS";
+            } else
+            {
+                rel_op_parse = "GREATER";
+            }
+
             if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
             {
-                std::cout << "GREATER_EQUAL >= null\n";
+                std::cout << rel_op_parse << "_EQUAL " << file_contents[i] << "= null\n";
                 i += 1;
             } else {
-                std::cout << "GREATER > null\n";
+                std::cout << rel_op_parse << ' ' << file_contents[i] << " null\n";
             }
             break;
         default:
