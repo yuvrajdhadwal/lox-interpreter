@@ -84,7 +84,7 @@ void parse_char(char c)
         std::cout << "MINUS - null\n";
         break;
     case '+':
-        std::cout << "PLUS } null\n";
+        std::cout << "PLUS + null\n";
         break;
     case ';':
         std::cout << "SEMICOLON ; null\n";
