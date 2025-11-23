@@ -7,7 +7,7 @@
 
 std::string read_file_contents(const std::string& filename);
 void parse_characters(std::string_view file_contents);
-void scan_errors(std::string_view file_contents);
+int scan_errors(std::string_view file_contents);
 
 int main(int argc, char *argv[]) {
     // Disable output buffering
@@ -23,25 +23,25 @@ int main(int argc, char *argv[]) {
     }
 
     const std::string command = argv[1];
+    int exit_code {0};
 
     if (command == "tokenize") {
         std::string file_contents = read_file_contents(argv[2]);
         
         if (!file_contents.empty())
         {
-            scan_errors(file_contents);
+            exit_code = scan_errors(file_contents);
             parse_characters(file_contents);
         }
 
         std::cout << "EOF  null" << std::endl;
-        
         
     } else {
         std::cerr << "Unknown command: " << command << std::endl;
         return 1;
     }
 
-    return 0;
+    return exit_code;
 }
 
 std::string read_file_contents(const std::string& filename) {
@@ -103,8 +103,10 @@ void parse_characters(std::string_view file_contents)
     }
 }
 
-void scan_errors(std::string_view file_contents)
+int scan_errors(std::string_view file_contents)
 {
+    int exit_code {0};
+
     for (char c : file_contents)
     {
         switch (c)
@@ -112,6 +114,9 @@ void scan_errors(std::string_view file_contents)
         case '$':
         case '#':
             std::cerr << "[line 1] Error: Unexpected character: " << c << '\n';
+            exit_code = 65;
         }
     }
+
+    return exit_code;
 }
