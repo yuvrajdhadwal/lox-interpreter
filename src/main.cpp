@@ -113,6 +113,24 @@ int parse_characters(std::string_view file_contents)
                 std::cout << "BANG ! null\n";
             }
             break;
+        case '<':
+            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
+            {
+                std::cout << "LESS_EQUAL <= null\n";
+                i += 1;
+            } else {
+                std::cout << "LESS < null\n";
+            }
+            break;
+        case '>':
+            if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
+            {
+                std::cout << "GREATER_EQUAL >= null\n";
+                i += 1;
+            } else {
+                std::cout << "GREATER > null\n";
+            }
+            break;
         default:
             std::cerr << "[line 1] Error: Unexpected character: " << file_contents[i] << '\n';
             exit_code = 65;
