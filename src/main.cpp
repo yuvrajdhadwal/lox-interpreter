@@ -58,6 +58,7 @@ std::string read_file_contents(const std::string& filename) {
 int parse_characters(std::string_view file_contents)
 {
     int exit_code {0};
+    int line_number {1};
     for (int i {0}; i < file_contents.length(); ++i)
     {
         std::string rel_op_parse{};
@@ -129,10 +130,13 @@ int parse_characters(std::string_view file_contents)
             break;
         case ' ':
         case '\t':
+            break;
         case '\n':
+            ++line_number;
             break;
         default:
-            std::cerr << "[line 1] Error: Unexpected character: " << file_contents[i] << '\n';
+            std::cerr << "[line " << line_number
+                << "] Error: Unexpected character: " << file_contents[i] << '\n';
             exit_code = 65;
             break;
         }   
