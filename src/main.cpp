@@ -95,7 +95,7 @@ int parse_characters(std::string_view file_contents)
             {
                 return exit_code;
             }
-            
+
             std::cout << "SLASH / null\n";
             break;
         case '*':
@@ -127,9 +127,15 @@ int parse_characters(std::string_view file_contents)
                 std::cout << rel_op_parse << ' ' << file_contents[i] << " null\n";
             }
             break;
+        case ' ':
+        case '\t':
+        case '\n':
+            std::cout << "found something!\n";
+            break;
         default:
             std::cerr << "[line 1] Error: Unexpected character: " << file_contents[i] << '\n';
             exit_code = 65;
+            break;
         }   
     }
 
