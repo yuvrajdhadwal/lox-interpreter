@@ -6,8 +6,7 @@
 #include <string_view>
 
 std::string read_file_contents(const std::string& filename);
-void parse_characters(std::string_view file_contents);
-int scan_errors(std::string_view file_contents);
+int parse_characters(std::string_view file_contents);
 
 int main(int argc, char *argv[]) {
     // Disable output buffering
@@ -30,8 +29,7 @@ int main(int argc, char *argv[]) {
         
         if (!file_contents.empty())
         {
-            exit_code = scan_errors(file_contents);
-            parse_characters(file_contents);
+            exit_code = parse_characters(file_contents);
         }
 
         std::cout << "EOF  null" << std::endl;
@@ -40,7 +38,6 @@ int main(int argc, char *argv[]) {
         std::cerr << "Unknown command: " << command << std::endl;
         return 1;
     }
-
     return exit_code;
 }
 
@@ -58,8 +55,9 @@ std::string read_file_contents(const std::string& filename) {
     return buffer.str();
 }
 
-void parse_characters(std::string_view file_contents)
+int parse_characters(std::string_view file_contents)
 {
+    int exit_code {0};
     for (char c : file_contents)
     {
         switch (c)
@@ -98,24 +96,9 @@ void parse_characters(std::string_view file_contents)
             std::cout << "STAR * null\n";
             break;
         default:
-            ;  // null statement
-        }   
-    }
-}
-
-int scan_errors(std::string_view file_contents)
-{
-    int exit_code {0};
-
-    for (char c : file_contents)
-    {
-        switch (c)
-        {
-        case '$':
-        case '#':
             std::cerr << "[line 1] Error: Unexpected character: " << c << '\n';
             exit_code = 65;
-        }
+        }   
     }
 
     return exit_code;
