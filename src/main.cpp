@@ -130,7 +130,6 @@ int parse_characters(std::string_view file_contents)
         case ' ':
         case '\t':
         case '\n':
-            std::cout << "found something!\n";
             break;
         default:
             std::cerr << "[line 1] Error: Unexpected character: " << file_contents[i] << '\n';
