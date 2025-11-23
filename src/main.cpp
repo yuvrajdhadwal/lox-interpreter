@@ -5,6 +5,7 @@
 #include <string>
 
 std::string read_file_contents(const std::string& filename);
+void parse_char(char c);
 
 int main(int argc, char *argv[]) {
     // Disable output buffering
@@ -28,23 +29,7 @@ int main(int argc, char *argv[]) {
         {
             for (char c : file_contents)
             {
-                switch (c)
-                {
-                case '(':
-                    std::cout << "LEFT_PAREN ( null\n";
-                    break;
-                case ')':
-                    std::cout << "RIGHT_PAREN ) null\n";
-                    break;
-                case '{':
-                    std::cout << "LEFT_BRACE { null\n";
-                    break;
-                case '}':
-                    std::cout << "RIGHT_BRACE } null\n";
-                    break;
-                default:
-                    std::cout << "Oops something wrong happened\n";
-                }
+                parse_char(c);
             }
         }
 
@@ -71,4 +56,46 @@ std::string read_file_contents(const std::string& filename) {
     file.close();
 
     return buffer.str();
+}
+
+void parse_char(char c)
+{
+    switch (c)
+    {
+    case '(':
+        std::cout << "LEFT_PAREN ( null\n";
+        break;
+    case ')':
+        std::cout << "RIGHT_PAREN ) null\n";
+        break;
+    case '{':
+        std::cout << "LEFT_BRACE { null\n";
+        break;
+    case '}':
+        std::cout << "RIGHT_BRACE } null\n";
+        break;
+    case ',':
+        std::cout << "COMMA , null\n";
+        break;
+    case '.':
+        std::cout << "DOT . null\n";
+        break;
+    case '-':
+        std::cout << "MINUS - null\n";
+        break;
+    case '+':
+        std::cout << "PLUS } null\n";
+        break;
+    case ';':
+        std::cout << "SEMICOLON ; null\n";
+        break;
+    case '/':
+        std::cout << "SLASH / null\n";
+        break;
+    case '*':
+        std::cout << "STAR * null\n";
+        break;
+    default:
+        std::cout << "Oops something wrong happened\n";
+    }
 }
