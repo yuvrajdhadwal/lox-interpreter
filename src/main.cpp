@@ -3,9 +3,11 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <string_view>
 
 std::string read_file_contents(const std::string& filename);
-void parse_char(char c);
+void parse_characters(std::string_view file_contents);
+void scan_errors(std::string_view file_contents);
 
 int main(int argc, char *argv[]) {
     // Disable output buffering
@@ -27,10 +29,8 @@ int main(int argc, char *argv[]) {
         
         if (!file_contents.empty())
         {
-            for (char c : file_contents)
-            {
-                parse_char(c);
-            }
+            scan_errors(file_contents);
+            parse_characters(file_contents);
         }
 
         std::cout << "EOF  null" << std::endl;
@@ -58,48 +58,60 @@ std::string read_file_contents(const std::string& filename) {
     return buffer.str();
 }
 
-void parse_char(char c)
+void parse_characters(std::string_view file_contents)
 {
-    switch (c)
+    for (char c : file_contents)
     {
-    case '(':
-        std::cout << "LEFT_PAREN ( null\n";
-        break;
-    case ')':
-        std::cout << "RIGHT_PAREN ) null\n";
-        break;
-    case '{':
-        std::cout << "LEFT_BRACE { null\n";
-        break;
-    case '}':
-        std::cout << "RIGHT_BRACE } null\n";
-        break;
-    case ',':
-        std::cout << "COMMA , null\n";
-        break;
-    case '.':
-        std::cout << "DOT . null\n";
-        break;
-    case '-':
-        std::cout << "MINUS - null\n";
-        break;
-    case '+':
-        std::cout << "PLUS + null\n";
-        break;
-    case ';':
-        std::cout << "SEMICOLON ; null\n";
-        break;
-    case '/':
-        std::cout << "SLASH / null\n";
-        break;
-    case '*':
-        std::cout << "STAR * null\n";
-        break;
-    case '$':
-    case '#':
-        std::cout << "[line 1] Error: Unexpected character: " << c << '\n';
-        break;
-    default:
-        std::cout << "Oops something wrong happened\n";
+        switch (c)
+        {
+        case '(':
+            std::cout << "LEFT_PAREN ( null\n";
+            break;
+        case ')':
+            std::cout << "RIGHT_PAREN ) null\n";
+            break;
+        case '{':
+            std::cout << "LEFT_BRACE { null\n";
+            break;
+        case '}':
+            std::cout << "RIGHT_BRACE } null\n";
+            break;
+        case ',':
+            std::cout << "COMMA , null\n";
+            break;
+        case '.':
+            std::cout << "DOT . null\n";
+            break;
+        case '-':
+            std::cout << "MINUS - null\n";
+            break;
+        case '+':
+            std::cout << "PLUS + null\n";
+            break;
+        case ';':
+            std::cout << "SEMICOLON ; null\n";
+            break;
+        case '/':
+            std::cout << "SLASH / null\n";
+            break;
+        case '*':
+            std::cout << "STAR * null\n";
+            break;
+        default:
+            ;  // null statement
+        }   
+    }
+}
+
+void scan_errors(std::string_view file_contents)
+{
+    for (char c : file_contents)
+    {
+        switch (c)
+        {
+        case '$':
+        case '#':
+            std::cerr << "[line 1] Error: Unexpected character: " << c << '\n';
+        }
     }
 }
