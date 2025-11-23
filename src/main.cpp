@@ -95,6 +95,10 @@ void parse_char(char c)
     case '*':
         std::cout << "STAR * null\n";
         break;
+    case '$':
+    case '#':
+        std::cout << "[line 1] Error: Unexpected character: " << c << '\n';
+        break;
     default:
         std::cout << "Oops something wrong happened\n";
     }
