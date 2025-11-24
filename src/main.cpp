@@ -6,7 +6,9 @@
 #include <string_view>
 
 std::string read_file_contents(const std::string& filename);
-int parse_characters(std::string_view file_contents);
+void parse_characters(std::string_view file_contents, int& exit_code);
+void parse_string_literal(std::string_view file_contents, int& i, int& line_number, int& exit_code);
+void parse_relational_op(std::string_view file_contents, int i);
 
 int main(int argc, char *argv[]) {
     // Disable output buffering
@@ -29,7 +31,7 @@ int main(int argc, char *argv[]) {
         
         if (!file_contents.empty())
         {
-            exit_code = parse_characters(file_contents);
+            parse_characters(file_contents, exit_code);
         }
 
         std::cout << "EOF  null" << std::endl;
@@ -55,9 +57,8 @@ std::string read_file_contents(const std::string& filename) {
     return buffer.str();
 }
 
-int parse_characters(std::string_view file_contents)
+void parse_characters(std::string_view file_contents, int& exit_code)
 {
-    int exit_code {0};
     int line_number {1};
     bool is_comment {false};
 
@@ -115,33 +116,16 @@ int parse_characters(std::string_view file_contents)
             case '!':
             case '<':
             case '>':
-                if (file_contents[i] == '=')
-                {
-                    rel_op_parse = "EQUAL";
-                } else if (file_contents[i] == '!')
-                {
-                    rel_op_parse = "BANG";
-                } else if (file_contents[i] == '<')
-                {
-                    rel_op_parse = "LESS";
-                } else
-                {
-                    rel_op_parse = "GREATER";
-                }
-
-                if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
-                {
-                    std::cout << rel_op_parse << "_EQUAL " << file_contents[i] << "= null\n";
-                    i += 1;
-                } else {
-                    std::cout << rel_op_parse << ' ' << file_contents[i] << " null\n";
-                }
+                parse_relational_op(file_contents, i);
                 break;
             case ' ':
             case '\t':
                 break;
             case '\n':
                 ++line_number;
+                break;
+            case '"':
+                parse_string_literal(file_contents, i, line_number, exit_code);
                 break;
             default:
                 std::cerr << "[line " << line_number
@@ -151,6 +135,57 @@ int parse_characters(std::string_view file_contents)
             }
         }
     }
+}
 
-    return exit_code;
+void parse_relational_op(std::string_view file_contents, int i)
+{
+    std::string rel_op_parse{};
+    if (file_contents[i] == '=')
+    {
+        rel_op_parse = "EQUAL";
+    } else if (file_contents[i] == '!')
+    {
+        rel_op_parse = "BANG";
+    } else if (file_contents[i] == '<')
+    {
+        rel_op_parse = "LESS";
+    } else
+    {
+        rel_op_parse = "GREATER";
+    }
+
+    if (i + 1 < file_contents.length() && file_contents[i + 1] == '=')
+    {
+        std::cout << rel_op_parse << "_EQUAL " << file_contents[i] << "= null\n";
+        i += 1;
+    } else {
+        std::cout << rel_op_parse << ' ' << file_contents[i] << " null\n";
+    }
+}
+
+void parse_string_literal(std::string_view file_contents, int& i, int& line_number, int& exit_code)
+{
+    int string_start = i;
+    ++i;
+
+    while (i < file_contents.length() && file_contents[i] != '"')
+    {
+        if (file_contents[i] == '\n')
+        {
+            ++line_number;
+        }
+        ++i;
+    }
+
+    if (i >= file_contents.length())
+    {
+        std::cerr << "[line " << line_number
+            << "] Error: Error: Unterminated string.\n";
+        exit_code = 65;
+    }
+    else {
+        std::string_view str = file_contents.substr(string_start + 1, i - string_start - 1);
+        std::cout << "STRING \"" << str << "\" " << str << '\n';
+        ++i;
+    }
 }
