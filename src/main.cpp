@@ -186,6 +186,5 @@ void parse_string_literal(std::string_view file_contents, int& i, int& line_numb
     else {
         std::string_view str = file_contents.substr(string_start + 1, i - string_start - 1);
         std::cout << "STRING \"" << str << "\" " << str << '\n';
-        ++i;
     }
 }
