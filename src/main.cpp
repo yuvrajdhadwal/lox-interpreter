@@ -180,7 +180,7 @@ void parse_string_literal(std::string_view file_contents, int& i, int& line_numb
     if (i >= file_contents.length())
     {
         std::cerr << "[line " << line_number
-            << "] Error: Error: Unterminated string.\n";
+            << "] Error: Unterminated string.\n";
         exit_code = 65;
     }
     else {
