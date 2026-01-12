@@ -154,7 +154,7 @@ void parse_number(std::string_view file_contents, int& i)
         double decimal_place {0.1};
         int trailing_zero_count {0};
 
-        while (i < file_contents.length() && file_contents[++i])
+        while (i + 1 < file_contents.length() && file_contents[++i])
         {
             number += (file_contents[i] - '0') * decimal_place;
             decimal_place *= 0.1;
