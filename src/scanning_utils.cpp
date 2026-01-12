@@ -143,7 +143,7 @@ void parse_number(std::string_view file_contents, int& i)
     int starting_index = i;
     double number {static_cast<double>(file_contents[i++] - '0')};
 
-    while (isdigit(file_contents[i]))
+    while (i < file_contents.length() && (file_contents[i]))
     {
         number *= 10;
         number += static_cast<double>(file_contents[i++] - '0');
@@ -154,7 +154,7 @@ void parse_number(std::string_view file_contents, int& i)
         double decimal_place {0.1};
         int trailing_zero_count {0};
 
-        while (isdigit(file_contents[++i]))
+        while (i < file_contents.length() && file_contents[++i])
         {
             number += (file_contents[i] - '0') * decimal_place;
             decimal_place *= 0.1;
