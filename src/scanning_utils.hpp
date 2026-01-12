@@ -8,6 +8,6 @@
 
 std::string read_file_contents(const std::string& filename);
 void parse_characters(std::string_view file_contents, int& exit_code);
-void parse_string_literal(std::string_view file_contents, int& i, int& line_number, int& exit_code);
-void parse_relational_op(std::string_view file_contents, int& i);
-void parse_number(std::string_view file_contents, int& i);
+void parse_string_literal(std::string_view file_contents, size_t& i, int& line_number, int& exit_code);
+void parse_relational_op(std::string_view file_contents, size_t& i);
+void parse_number(std::string_view file_contents, size_t& i);

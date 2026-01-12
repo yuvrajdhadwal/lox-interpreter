@@ -5,7 +5,7 @@ void parse_characters(std::string_view file_contents, int& exit_code)
     int line_number {1};
     bool is_comment {false};
 
-    for (int i {0}; i < file_contents.length(); ++i)
+    for (size_t i {0}; i < file_contents.length(); ++i)
     {
         std::string rel_op_parse{};
         if (is_comment && file_contents[i] == '\n')
@@ -74,6 +74,7 @@ void parse_characters(std::string_view file_contents, int& exit_code)
                 if (isdigit(file_contents[i]))
                 {
                     parse_number(file_contents, i);
+                    break;
                 } else
                 {
                     std::cerr << "[line " << line_number
@@ -86,7 +87,7 @@ void parse_characters(std::string_view file_contents, int& exit_code)
     }
 }
 
-void parse_relational_op(std::string_view file_contents, int& i)
+void parse_relational_op(std::string_view file_contents, size_t& i)
 {
     std::string rel_op_parse{};
     if (file_contents[i] == '=')
@@ -112,9 +113,9 @@ void parse_relational_op(std::string_view file_contents, int& i)
     }
 }
 
-void parse_string_literal(std::string_view file_contents, int& i, int& line_number, int& exit_code)
+void parse_string_literal(std::string_view file_contents, size_t& i, int& line_number, int& exit_code)
 {
-    int string_start {i};
+    size_t string_start {i};
     ++i;
 
     while (i < file_contents.length() && file_contents[i] != '"')
@@ -138,12 +139,12 @@ void parse_string_literal(std::string_view file_contents, int& i, int& line_numb
     }
 }
 
-void parse_number(std::string_view file_contents, int& i)
+void parse_number(std::string_view file_contents, size_t& i)
 {
-    int starting_index = i;
+    size_t starting_index = i;
     double number {static_cast<double>(file_contents[i++] - '0')};
 
-    while (i < file_contents.length() && (file_contents[i]))
+    while (i < file_contents.length() && isdigit(file_contents[i]))
     {
         number *= 10;
         number += static_cast<double>(file_contents[i++] - '0');
@@ -152,9 +153,8 @@ void parse_number(std::string_view file_contents, int& i)
     if (file_contents[i] == '.')
     {
         double decimal_place {0.1};
-        int trailing_zero_count {0};
 
-        while (i + 1 < file_contents.length() && file_contents[++i])
+        while (i + 1 < file_contents.length() && isdigit(file_contents[++i]))
         {
             number += (file_contents[i] - '0') * decimal_place;
             decimal_place *= 0.1;
