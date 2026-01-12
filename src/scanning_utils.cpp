@@ -71,10 +71,16 @@ void parse_characters(std::string_view file_contents, int& exit_code)
                 parse_string_literal(file_contents, i, line_number, exit_code);
                 break;
             default:
-                std::cerr << "[line " << line_number
-                    << "] Error: Unexpected character: " << file_contents[i] << '\n';
-                exit_code = 65;
-                break;
+                if (isdigit(file_contents[i]))
+                {
+                    parse_number(file_contents, i);
+                } else
+                {
+                    std::cerr << "[line " << line_number
+                        << "] Error: Unexpected character: " << file_contents[i] << '\n';
+                    exit_code = 65;
+                    break;
+                }
             }
         }
     }
@@ -108,7 +114,7 @@ void parse_relational_op(std::string_view file_contents, int& i)
 
 void parse_string_literal(std::string_view file_contents, int& i, int& line_number, int& exit_code)
 {
-    int string_start = i;
+    int string_start {i};
     ++i;
 
     while (i < file_contents.length() && file_contents[i] != '"')
@@ -127,7 +133,40 @@ void parse_string_literal(std::string_view file_contents, int& i, int& line_numb
         exit_code = 65;
     }
     else {
-        std::string_view str = file_contents.substr(string_start + 1, i - string_start - 1);
+        std::string_view str {file_contents.substr(string_start + 1, i - string_start - 1)};
         std::cout << "STRING \"" << str << "\" " << str << '\n';
+    }
+}
+
+void parse_number(std::string_view file_contents, int& i)
+{
+    int starting_index = i;
+    double number {static_cast<double>(file_contents[i++] - '0')};
+
+    while (isdigit(file_contents[i]))
+    {
+        number *= 10;
+        number += static_cast<double>(file_contents[i++] - '0');
+    }
+
+    if (file_contents[i] == '.')
+    {
+        double decimal_place {0.1};
+        int trailing_zero_count {0};
+
+        while (isdigit(file_contents[++i]))
+        {
+            number += (file_contents[i] - '0') * decimal_place;
+            decimal_place *= 0.1;
+        }
+    }
+
+    std::cout << "NUMBER " << file_contents.substr(starting_index, i - starting_index) << ' ';
+
+    if (number == std::floor(number))
+    {
+        std::printf("%.1f\n", number);
+    } else {
+        std::cout << number << '\n';
     }
 }
