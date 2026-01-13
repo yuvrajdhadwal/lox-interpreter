@@ -142,31 +142,28 @@ void parse_string_literal(std::string_view file_contents, size_t& i, int& line_n
 void parse_number(std::string_view file_contents, size_t& i)
 {
     size_t starting_index = i;
-    double number {static_cast<double>(file_contents[i++] - '0')};
 
-    while (i < file_contents.length() && isdigit(file_contents.at(i)))
+    while (i < file_contents.length() && isdigit(file_contents.at(i++)))
     {
-        number *= 10;
-        number += static_cast<double>(file_contents[i++] - '0');
     }
 
     if (i < file_contents.length() && file_contents.at(i) == '.')
     {
-        double decimal_place {0.1};
-
-        while (i + 1 < file_contents.length() && isdigit(file_contents[++i]))
+        i++;
+        while (i < file_contents.length() && isdigit(file_contents[i++]))
         {
-            number += (file_contents.at(i) - '0') * decimal_place;
-            decimal_place *= 0.1;
         }
     }
 
-    std::cout << "NUMBER " << file_contents.substr(starting_index, i - starting_index) << ' ';
+    std::string num_str {file_contents.substr(starting_index, i - starting_index)};
+    std::cout << "NUMBER " << num_str << ' ';
 
-    if (number == std::floor(number))
+    num_str = std::format("{}", std::stod(num_str));
+
+    if (num_str.find('.') == std::string::npos)
     {
-        std::printf("%.1f\n", number);
-    } else {
-        std::cout << number << '\n';
+        num_str += ".0";
     }
+
+    std::cout << num_str;
 }
