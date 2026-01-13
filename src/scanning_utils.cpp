@@ -165,5 +165,5 @@ void parse_number(std::string_view file_contents, size_t& i)
         num_str += ".0";
     }
 
-    std::cout << num_str;
+    std::cout << num_str << '\n';
 }
