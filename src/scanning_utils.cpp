@@ -143,27 +143,30 @@ void parse_number(std::string_view file_contents, size_t& i)
 {
     size_t starting_index = i;
 
-    while (i < file_contents.length() && isdigit(file_contents.at(i++)))
+    while (i < file_contents.length() && isdigit(file_contents.at(i)))
     {
+        ++i;
     }
 
     if (i < file_contents.length() && file_contents.at(i) == '.')
     {
-        i++;
-        while (i < file_contents.length() && isdigit(file_contents[i++]))
+        ++i;
+        while (i < file_contents.length() && isdigit(file_contents[i]))
         {
+            ++i;
         }
     }
 
     std::string num_str {file_contents.substr(starting_index, i - starting_index)};
     std::cout << "NUMBER " << num_str << ' ';
 
-    num_str = std::format("{}", std::stod(num_str));
+    double num_double {std::stod(num_str)};
 
-    if (num_str.find('.') == std::string::npos)
+    if (num_double == std::floor(num_double))
     {
-        num_str += ".0";
+        printf("%.1f\n", num_double);
+    } else
+    {
+        std::cout << num_str << '\n';
     }
-
-    std::cout << num_str << '\n';
 }
