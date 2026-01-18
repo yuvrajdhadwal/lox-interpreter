@@ -169,4 +169,5 @@ void parse_number(std::string_view file_contents, size_t& i)
     {
         std::cout << num_str << '\n';
     }
+    --i;
 }
