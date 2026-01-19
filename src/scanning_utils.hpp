@@ -1,10 +1,11 @@
 #pragma once
 
-#include <cctype>
+// #include <cctype>
 #include <cmath>
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
 std::string read_file_contents(const std::string& filename);
 void parse_characters(std::string_view file_contents, int& exit_code);

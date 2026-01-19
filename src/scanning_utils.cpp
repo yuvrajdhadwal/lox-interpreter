@@ -1,5 +1,25 @@
 #include "scanning_utils.hpp"
 
+static const std::unordered_map<std::string, std::string> g_reserved_words
+{
+    {"and", "AND"},
+    {"class", "CLASS"},
+    {"else", "ELSE"},
+    {"false", "FALSE"},
+    {"for", "FOR"},
+    {"fun", "FUN"},
+    {"if", "IF"},
+    {"nil", "NIL"},
+    {"or", "OR"},
+    {"print", "PRINT"},
+    {"return", "RETURN"},
+    {"super", "SUPER"},
+    {"this", "THIS"},
+    {"true", "TRUE"},
+    {"var", "VAR"},
+    {"while", "WHILE"},
+};
+
 void parse_characters(std::string_view file_contents, int& exit_code)
 {
     int line_number {1};
@@ -204,5 +224,13 @@ void parse_identifier(std::string_view file_contents, size_t& i)
 
     std::string identifier {file_contents.substr(initial_i, i - initial_i + 1)};
 
-    std::cout << "IDENTIFIER " << identifier << " null\n";
+    auto it {g_reserved_words.find(identifier)};
+    
+    if (it != g_reserved_words.end())
+    {
+        std::cout << it->second << ' ' << it->first << " null\n";
+    } else
+    {
+        std::cout << "IDENTIFIER " << identifier << " null\n";
+    }
 }
