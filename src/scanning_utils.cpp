@@ -75,7 +75,12 @@ void parse_characters(std::string_view file_contents, int& exit_code)
                 {
                     parse_number(file_contents, i);
                     break;
-                } else
+                } else if (is_identifier(file_contents.at(i)))
+                {
+                    parse_identifier(file_contents, i);
+                    break;
+                }
+                else
                 {
                     std::cerr << "[line " << line_number
                         << "] Error: Unexpected character: " << file_contents.at(i) << '\n';
@@ -169,6 +174,35 @@ void parse_number(std::string_view file_contents, size_t& i)
     {
         std::cout.precision(static_cast<std::streamsize>(num_str.size() - 1));
         std::cout << std::defaultfloat << num_double << '\n';
+        std::cout.precision(6);
+        std::cout << std::fixed;
     }
     --i;
+}
+
+bool is_identifier(char c)
+{
+    if ((c >= 'a' && c <= 'z')
+        || (c >= 'A' && c <= 'Z')
+        || c == '_')
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void parse_identifier(std::string_view file_contents, size_t& i)
+{
+    size_t initial_i {i};
+
+    while (i + 1 < file_contents.size()
+        && (is_identifier(file_contents.at(i + 1)) || isdigit(file_contents.at(i + 1))))
+    {
+        ++i;
+    }
+
+    std::string identifier {file_contents.substr(initial_i, i - initial_i + 1)};
+
+    std::cout << "IDENTIFIER " << identifier << " null\n";
 }

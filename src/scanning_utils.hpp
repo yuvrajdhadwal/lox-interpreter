@@ -11,3 +11,5 @@ void parse_characters(std::string_view file_contents, int& exit_code);
 void parse_string_literal(std::string_view file_contents, size_t& i, int& line_number, int& exit_code);
 void parse_relational_op(std::string_view file_contents, size_t& i);
 void parse_number(std::string_view file_contents, size_t& i);
+bool is_identifier(char c);
+void parse_identifier(std::string_view file_contents, size_t& i);
