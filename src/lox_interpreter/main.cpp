@@ -1,4 +1,4 @@
-#include "scanning_utils.hpp"
+#include "lox_interpreter/scanning/scanning_utils.hpp"
 
 #include <cstring>
 #include <fstream>

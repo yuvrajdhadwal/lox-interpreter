@@ -17,7 +17,7 @@ BUILD_DIR="$REPO_DIR/build"
 # - Edit .codecrafters/compile.sh to change how your program compiles remotely
 (
   cd "$(dirname "$0")" # Ensure compile steps are run within the repository directory
-  cmake -S . -B "$BUILD_DIR"
+  cmake -S . -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Debug
   cmake --build ./build
 )
 
