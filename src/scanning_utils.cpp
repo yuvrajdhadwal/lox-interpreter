@@ -167,7 +167,8 @@ void parse_number(std::string_view file_contents, size_t& i)
         printf("%.1f\n", num_double);
     } else
     {
-        std::cout << num_str << '\n';
+        std::cout.precision(static_cast<std::streamsize>(num_str.size() - 1));
+        std::cout << std::defaultfloat << num_double << '\n';
     }
     --i;
 }
