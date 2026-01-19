@@ -1,4 +1,4 @@
-#include "lox_interpreter/scanning/scanning_utils.hpp"
+#include "scanning/scanning_utils.hpp"
 
 static const std::unordered_map<std::string, std::string> g_reserved_words
 {

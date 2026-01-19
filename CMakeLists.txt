@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 23) # Enable the C++23 standard
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(lox_interpreter 
-    src/lox_interpreter/main.cpp
-    src/lox_interpreter/scanning/scanning_utils.cpp)
+    src/main.cpp
+    src/scanning/scanning_utils.cpp)
 
 target_include_directories(lox_interpreter PRIVATE
     include
