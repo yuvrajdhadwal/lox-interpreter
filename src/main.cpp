@@ -1,4 +1,6 @@
+#include "common/error_enums.hpp"
 #include "scanning/scanning_utils.hpp"
+#include "utils/error_handling.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -16,27 +18,32 @@ int main(int argc, char *argv[]) {
 
     if (argc < 3) {
         std::cerr << "Usage: ./your_program tokenize <filename>" << std::endl;
-        return 1;
+        return static_cast<int>(ErrorEnums::unknown_command);
     }
 
     const std::string command = argv[1];
-    int exit_code {0};
 
     if (command == "tokenize") {
         std::string file_contents = read_file_contents(argv[2]);
         
-        if (!file_contents.empty())
+        // if (!file_contents.empty())
+        // {
+            parse_characters(file_contents);
+        // }
+
+        // std::cout << "EOF  null" << std::endl;
+
+        if (ErrorHandling::had_error_)
         {
-            parse_characters(file_contents, exit_code);
+            return static_cast<int>(ErrorEnums::lox_error);
         }
 
-        std::cout << "EOF  null" << std::endl;
+        return static_cast<int>(ErrorEnums::no_error);
         
     } else {
         std::cerr << "Unknown command: " << command << std::endl;
-        return 1;
+        return static_cast<int>(ErrorEnums::unknown_command);
     }
-    return exit_code;
 }
 
 std::string read_file_contents(const std::string& filename) {

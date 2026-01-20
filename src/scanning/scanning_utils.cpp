@@ -20,7 +20,7 @@ static const std::unordered_map<std::string, std::string> g_reserved_words
     {"while", "WHILE"},
 };
 
-void parse_characters(std::string_view file_contents, int& exit_code)
+void parse_characters(std::string_view file_contents)
 {
     int line_number {1};
     bool is_comment {false};
@@ -88,7 +88,7 @@ void parse_characters(std::string_view file_contents, int& exit_code)
                 ++line_number;
                 break;
             case '"':
-                parse_string_literal(file_contents, i, line_number, exit_code);
+                parse_string_literal(file_contents, i, line_number);
                 break;
             default:
                 if (isdigit(file_contents.at(i)))
@@ -102,9 +102,8 @@ void parse_characters(std::string_view file_contents, int& exit_code)
                 }
                 else
                 {
-                    std::cerr << "[line " << line_number
-                        << "] Error: Unexpected character: " << file_contents.at(i) << '\n';
-                    exit_code = 65;
+                    ErrorHandling::lox_error(line_number,
+                        std::string {"Unexpected character: "} + file_contents[i]);
                     break;
                 }
             }
@@ -138,7 +137,7 @@ void parse_relational_op(std::string_view file_contents, size_t& i)
     }
 }
 
-void parse_string_literal(std::string_view file_contents, size_t& i, int& line_number, int& exit_code)
+void parse_string_literal(std::string_view file_contents, size_t& i, int& line_number)
 {
     size_t string_start {i};
     ++i;
@@ -154,9 +153,7 @@ void parse_string_literal(std::string_view file_contents, size_t& i, int& line_n
 
     if (i >= file_contents.length())
     {
-        std::cerr << "[line " << line_number
-            << "] Error: Unterminated string.\n";
-        exit_code = 65;
+        ErrorHandling::lox_error(line_number, "Unterminated string.");
     }
     else {
         std::string_view str {file_contents.substr(string_start + 1, i - string_start - 1)};

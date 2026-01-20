@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(lox_interpreter 
     src/main.cpp
-    src/scanning/scanning_utils.cpp)
+    src/scanning/scanning_utils.cpp
+    src/utils/error_handling.cpp
+    )
 
 target_include_directories(lox_interpreter PRIVATE
     include
