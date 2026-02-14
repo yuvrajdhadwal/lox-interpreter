@@ -41,7 +41,7 @@ class Scanner
         { return isDigit(curr_c) || isAlpha(curr_c); }
 
     auto advance() -> char { return m_source[m_current++]; }
-    void addToken(TokenType type) { addToken(type, nullptr); }
+    void addToken(TokenType type) { addToken(type, std::nullopt); }
     [[nodiscard]] auto peek() const -> char 
         { if (isAtEnd()) { return '\0'; } return m_source[m_current]; }
     

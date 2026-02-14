@@ -11,7 +11,7 @@ auto Scanner::scanTokens() -> std::vector<Token>
         scanToken();
     }
 
-    m_tokens.emplace_back(TokenType::END_FILE, "", nullptr, m_line);
+    m_tokens.emplace_back(TokenType::END_FILE, "", std::nullopt, m_line);
     return m_tokens;
 }
 
