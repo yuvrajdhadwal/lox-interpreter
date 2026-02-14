@@ -8,11 +8,12 @@ Token::Token(TokenType type, std::string_view lexeme, Literal literal, int line)
 // thanks to someone on codecrafters
 static auto literal_to_string(const Literal &literal) -> std::string
 {
-	if (!literal) { return "null"; }
-	if (std::holds_alternative<std::monostate>(*literal)) { return "nil"; }
-	if (std::holds_alternative<std::string>(*literal)) { return std::get<std::string>(*literal); }
+	if (!literal.has_value()) { return "null"; }
+	if (std::holds_alternative<std::monostate>(literal.value())) { return "nil"; }
+	if (std::holds_alternative<std::string>(literal.value())) 
+		{ return std::get<std::string>(literal.value()); }
 
-	double value = std::get<double>(*literal);
+	double value = std::get<double>(literal.value());
 
 	std::ostringstream oss;
 	const int max_precision{10};
