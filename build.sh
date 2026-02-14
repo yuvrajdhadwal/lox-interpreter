@@ -26,3 +26,5 @@ BUILD_DIR="$REPO_DIR/build"
 # - Edit this to change how your program runs locally
 # - Edit .codecrafters/run.sh to change how your program runs remotely
 exec $(dirname "$0")/build/interpreter "$@"
+
+# how to run: ./build.sh tokenize test.lox
